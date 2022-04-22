@@ -1,1 +1,1 @@
-A website for EarlyValentines, expect many uodates as the project blooms.
+A website for EarlyValentines, expect updates as the project blooms.
