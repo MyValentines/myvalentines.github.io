@@ -9,13 +9,17 @@
   <link rel="icon" type="image/png" href="/build/images/fav.png" />
 
   <link rel="stylesheet" href="/build/main.css">
-  <script src="/build/main.js"></script>
 </head>
 <body>
   <main>
     <img id="logo" src="/build/images/logo.png" alt="Logo" />
 
-    <ul style="display:flex;justify-content:center;align-items: center;">
+    <ul style="display:flex;justify-content:center;align-items:center;">
+      <li style="flex:1 1 1;margin:1em 1em 1em 0;">
+        <a href="/mint.html">
+        <img src="/build/images/mint.png" width="30em" title="Mint" alt="Mint" />
+        </a>
+      </li>
       <li style="flex:1 1 1;margin:1em 1em 1em 0;">
         <a href="https://twitter.com/EarlyValentines/" target="_blank">
         <img src="/build/images/twitter.png" width="30em" title="Twitter" alt="Twitter" />
@@ -38,15 +42,31 @@
       </li>
     </ul>
     
-    <noscript>
-      <div style="background:#aa2222;color:white;padding:4em;margin:2em 10em;text-align:center;border-radius:1em;" role="alert">
-        <strong>Javascript</strong> is disabled so this DApp won't work.
-        <br/>
-        Please enable it or switch to a modern browser.
-      </div>
-    </noscript>
-
-    <div id="minting-dapp"></div>
+    <div style="background:white;color:black;padding:2em;margin:2em 10em;text-align:center;border-radius:.5em;">
+      <h1>About</h1>
+      <br/>
+      Welcome to <strong>EarlyValentines</strong>, an Ethereum Collection that will give you first place in line for future mints as well as access to <emph>alpha versions</emph> of any <strong>apps/games</strong> among other <strong>perks</strong>. <a href="https://opensea.io/assets/0x731d6c6ef47e62ae0e61f51fe21ec5a513d75c68/1">The first Item</a> is a revealed Unique to show what to expect.
+    </div>
+    <div style="background:white;color:black;padding:2em;margin:2em 10em;text-align:center;border-radius:.5em;">
+      <h1>Details</h1>
+      <br/>
+      <ul>
+        <li>There are a <strong>total of 362 Items</strong>, split into <emph>Phases</emph>.</li>
+        <li><strong>10%</strong> of the Items will be <strong>reserved</strong> per <emph>Phase</emph>.</li>
+        <li>The <strong>last</strong> Item being a guaranteed <strong>Unique</strong>.</li>
+      </ul>
+    </div>
+    <div style="background:white;color:black;padding:2em;margin:2em 10em;text-align:center;border-radius:.5em;">
+      <h1>Community</h1>
+      <br/>
+      Per our community request, we skipped <emph>Whitelists</emph> and <a href="https://etherscan.io/address/0x731d6c6ef47e62ae0e61f51fe21ec5a513d75c68">verified our <emph>Contract</emph> on EtherScan.io</a>. This is discouraged as snipers can find the rarer items before mint but, in our case, the last ones are Unique.
+    </div>f
+    <div style="background:white;color:black;padding:2em;margin:2em 10em;text-align:center;border-radius:.5em;">
+      <h1>Mint</h1>
+      <br/>
+      <a href="/mint.html">To mint, simply press here</a> or the first item after the Logo and follow the instructions.
+      All links to our Collection in various Social Platforms and Marketplaces follow.
+    </div>
   </main>
 </body>
 </html>
