@@ -1,13 +1,17 @@
 {
   "build/main.css": "/build/main.css",
   "build/main.js": "/build/main.js",
+  "build/images/phase1.gif": "/build/images/phase1.gif",
   "build/images/bg.png": "/build/images/bg.png",
+  "build/images/phase2.gif": "/build/images/phase2.gif",
   "build/images/feature.png": "/build/images/feature.png",
   "build/images/preview.gif": "/build/images/preview.gif",
   "build/images/logo.png": "/build/images/logo.png",
-  "build/images/twitter.png": "/build/images/twitter.png",
+  "build/images/icon.png": "/build/images/icon.png",
   "build/images/fav.png": "/build/images/fav.png",
-  "build/images/looksrare.png": "/build/images/looksrare.png",
+  "build/images/mint.png": "/build/images/mint.png",
+  "build/images/twitter.png": "/build/images/twitter.png",
   "build/images/discord.png": "/build/images/discord.png",
-  "build/images/opensea.png": "/build/images/opensea.png"
+  "build/images/opensea.png": "/build/images/opensea.png",
+  "build/images/rarible.svg": "/build/images/rarible.svg"
 }
