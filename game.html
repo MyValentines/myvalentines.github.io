@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>EarlyValentines</title>
+  <link rel="icon" type="image/png" href="/build/images/fav.png" />
+
+  <link rel="stylesheet" href="/build/main.css">
+  
+  <script src="https://cdn.ethers.io/lib/ethers-5.6.umd.min.js" type="text/javascript"></script>
+  <script type="text/javascript" src="/game/abi.js"></script>
+  <script type="text/javascript" src="/game/game.js"></script>
+</head>
+<body>
+  <main>
+    <img id="logo" src="/build/images/logo.png" alt="Logo" />
+
+    <ul style="display:flex;justify-content:center;align-items: center;">
+      <li style="flex:1 1 1;margin:1em 1em 1em 0;">
+        <a href="/">
+        <img src="/build/images/icon.png" width="30em" title="Home" alt="Home" />
+        </a>
+      </li>
+      <li style="flex:1 1 1;margin:1em 1em 1em 0;">
+        <a href="https://twitter.com/EarlyValentines/" target="_blank">
+        <img src="/build/images/twitter.png" width="30em" title="Twitter" alt="Twitter" />
+        </a>
+      </li>
+      <li style="flex:1 1 1;margin:1em 1em 1em 0;">
+        <a href="https://discord.com/invite/p7mPduQ7HD/" target="_blank">
+        <img src="/build/images/discord.png" width="30em" title="Discord" alt="Discord" />
+        </a>
+      </li>
+      <li style="flex:1 1 1;margin:1em 1em 1em 0;">
+        <a href="https://opensea.io/collection/earlyvalentines/" target="_blank">
+        <img src="/build/images/opensea.png"  width="30em" title="OpenSea" alt="OpenSea" />
+        </a>
+      </li>
+      <li style="flex:1 1 1;margin:1em 1em 1em 0;">
+        <a href="https://rarible.com/earlyvalentines/" target="_blank">
+        <img src="/build/images/rarible.svg" width="30em" title="LooksRare" alt="LooksRare" />
+        </a>
+      </li>
+      <!--
+      <li style="flex:1 1 1;margin:1em 1em 1em 0;">
+        <a href="https://looksrare.org/collections/0x731d6C6eF47e62ae0e61f51fE21EC5a513d75C68/" target="_blank">
+        <img src="/build/images/looksrare.png" width="30em" title="LooksRare" alt="LooksRare" />
+        </a>
+      </li>
+      -->
+    </ul>
+    
+    <noscript>
+      <div style="background:#aa2222;color:white;padding:4em;margin:2em 10%;text-align:center;border-radius:.5em;" role="alert">
+        <strong>Javascript</strong> is disabled so this DApp won't work.
+        <br/>
+        Please enable it or switch to a modern browser.
+      </div>
+    </noscript>
+    
+    <div id="instructions" style="display:none;">
+    You need an <a href="/mint.html"><strong>EarlyValentine</strong></a> to play! Press to play the Trailer/Enable the keyboard.
+    <br/>
+      <button onclick="connect();">Check Wallet</button>
+      <div id="status"></div>
+    </div>
+
+    <div id="content" style="display:none;"></div>
+    
+    <div style="background:white;color:black;padding:2em;margin:2em 10em;text-align:center;border-radius:.5em;">
+      Copyright © 2022 <a href="#">EarlyValentines</a>. All rights Reserved.
+    </div>
+    
+    <script>show();</script>
+  </main>
+</body>
+</html>
