@@ -1,1 +1,3 @@
-A website for EarlyValentines, expect updates as the project blooms.
+A website for EarlyValentines, the NFT that gives you:
+- Whitelists for future Collections
+- Continues in the game HeartBeats
