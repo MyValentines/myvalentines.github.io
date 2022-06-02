@@ -8,6 +8,17 @@
   <title>EarlyValentines</title>
   <link rel="icon" type="image/png" href="/build/images/fav.png" />
 
+  <style>
+    body{background:maroon;color:white;}
+    img{vertical-align:middle;}
+    
+    .panel{background:white;color:black;padding:2em;margin:2em 10%;text-align:center;border-radius:.5em;}
+    .tight{margin:2em 20%;}
+    .alert{background:#aa2222;color:white;padding:4em;}
+    
+    ul.menu{display:flex;justify-content:center;align-items: center;}
+    ul.menu li{flex:1 1 1;margin:1em 1em 1em 0;}
+  </style>
   <link rel="stylesheet" href="/build/main.css">
   
   <script type="text/javascript" src="/game/ethers-5.6.umd.min.js"></script>
@@ -16,36 +27,36 @@
 </head>
 <body>
   <main>
-    <img id="logo" src="/build/images/logo.png" alt="Logo" />
+    <a href="/"><img id="logo" src="/build/images/logo.png" alt="Logo" /></a>
 
-    <ul style="display:flex;justify-content:center;align-items: center;">
-      <li style="flex:1 1 1;margin:1em 1em 1em 0;">
+    <ul class="menu">
+      <li>
         <a href="/">
-        <img src="/build/images/icon.png" width="30em" title="Home" alt="Home" />
+        <img src="/build/images/home.png" width="30em" title="Home" alt="Home" />
         </a>
       </li>
-      <li style="flex:1 1 1;margin:1em 1em 1em 0;">
+      <li>
         <a href="https://twitter.com/EarlyValentines/" target="_blank">
         <img src="/build/images/twitter.png" width="30em" title="Twitter" alt="Twitter" />
         </a>
       </li>
-      <li style="flex:1 1 1;margin:1em 1em 1em 0;">
+      <li>
         <a href="https://discord.com/invite/p7mPduQ7HD/" target="_blank">
         <img src="/build/images/discord.png" width="30em" title="Discord" alt="Discord" />
         </a>
       </li>
-      <li style="flex:1 1 1;margin:1em 1em 1em 0;">
+      <li>
         <a href="https://opensea.io/collection/earlyvalentines/" target="_blank">
         <img src="/build/images/opensea.png"  width="30em" title="OpenSea" alt="OpenSea" />
         </a>
       </li>
-      <li style="flex:1 1 1;margin:1em 1em 1em 0;">
+      <li>
         <a href="https://rarible.com/earlyvalentines/" target="_blank">
         <img src="/build/images/rarible.svg" width="30em" title="LooksRare" alt="LooksRare" />
         </a>
       </li>
       <!--
-      <li style="flex:1 1 1;margin:1em 1em 1em 0;">
+      <li>
         <a href="https://looksrare.org/collections/0x731d6C6eF47e62ae0e61f51fE21EC5a513d75C68/" target="_blank">
         <img src="/build/images/looksrare.png" width="30em" title="LooksRare" alt="LooksRare" />
         </a>
@@ -54,7 +65,7 @@
     </ul>
     
     <noscript>
-      <div style="background:#aa2222;color:white;padding:4em;margin:2em 10%;text-align:center;border-radius:.5em;" role="alert">
+      <div class="alert panel" role="alert">
         <strong>Javascript</strong> is disabled so this DApp won't work.
         <br/>
         Please enable it or switch to a modern browser.
@@ -73,7 +84,7 @@
 
     <div id="content" style="display:none;"></div>
     
-    <div style="background:white;color:black;padding:2em;margin:2em 20%;text-align:center;border-radius:.5em;">
+    <div class="tight panel">
       Copyright © 2022 <a href="https://myvalentines-theta.vercel.app">MyValentines</a>. All rights Reserved.
     </div>
     
