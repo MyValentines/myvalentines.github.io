@@ -20,10 +20,6 @@
     ul.menu li{flex:1 1 1;margin:1em 1em 1em 0;}
   </style>
   <link rel="stylesheet" href="/build/main.css">
-  
-  <script type="text/javascript" src="/game/ethers-5.6.umd.min.js"></script>
-  <script type="text/javascript" src="/game/abi.js"></script>
-  <script type="text/javascript" src="/game/game.js"></script>
 </head>
 <body>
   <main>
@@ -60,23 +56,13 @@
       </div>
     </noscript>
     
-    <div id="instructions" style="display:none;">
-    Having <a href="/mint.html"><strong>EarlyValentines</strong></a> will give you Continues.<br/>
-    Press to play the Trailer/Enable the keyboard.
-    <br/>
-      <button onclick="show(false);">Watch Trailer</button>
-      <!--<button onclick="show(true);">Play</button>-->
-      <button onclick="connect();">Play (checks wallet)</button>
-      <div id="status"></div>
-    </div>
-
-    <div id="content" style="display:none;"></div>
+    <div id="content" style="background:white;color:black;padding:2em;margin:1em 10%;text-align:center;border-radius:.5em;"></div>
+    
+    <script src="game/game.js"></script>
     
     <div class="tight panel">
       Copyright © 2022 <a href="https://myvalentines-theta.vercel.app">MyValentines</a>. All rights Reserved.
     </div>
-    
-    <script>show(false);</script>
   </main>
 </body>
 </html>
