@@ -113,7 +113,62 @@
 	</style>
 <link id='-gd-engine-icon' rel='icon' type='image/png' href='HeartBeats.icon.png' />
 <link rel='apple-touch-icon' href='HeartBeats.apple-touch-icon.png'/>
+<script type="text/javascript" src="ethers-5.6.umd.min.js"></script>
+<script>
+var proxy = {
+"getAddress": async function getAddress(callback) {
+  if(!ethers.provider) {
+    ethers.provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+  }
+  await ethers.provider.send("eth_requestAccounts", []).
+    catch((error) => {console.error(error);}).
+  then((accs) => {
+    if(accs.length > 0) {
+      callback(accs[0]);
+    } else {
+      callback(null);
+    }
+  });
+},
+"countTokens": async function countTokens(wallet, callback) {
+  if(!ethers.provider) {
+    ethers.provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+  }
+  
+  const address = "0x731d6C6eF47e62ae0e61f51fE21EC5a513d75C68";
+  const abi = [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_owner",
+          "type": "address"
+        }
+      ],
+      "name": "walletOfOwner",
+      "outputs": [
+        {
+          "internalType": "uint256[]",
+          "name": "",
+          "type": "uint256[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ];
 
+  const contract = new ethers.Contract(
+    address,
+    abi,
+    ethers.provider
+  );
+  
+  await contract.walletOfOwner(wallet).
+    then((tokens) => {callback(tokens.length);}).
+    catch((error) => {console.error(error);callback(0);})
+}}
+</script>
 </head>
 <body>
 	<canvas id='canvas'>
@@ -138,7 +193,7 @@
 	<script type='text/javascript' src='HeartBeats.js'></script>
 	<script type='text/javascript'>//<![CDATA[
 
-		const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"executable":"HeartBeats","experimentalVK":false,"fileSizes":{"HeartBeats.pck":15512224,"HeartBeats.wasm":17503191},"focusCanvas":true,"gdnativeLibs":[]};
+		const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"executable":"HeartBeats","experimentalVK":false,"fileSizes":{"HeartBeats.pck":15702432,"HeartBeats.wasm":17503191},"focusCanvas":true,"gdnativeLibs":[]};
 		var engine = new Engine(GODOT_CONFIG);
 
 		(function() {
