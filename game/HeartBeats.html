@@ -167,7 +167,96 @@ var proxy = {
   await contract.walletOfOwner(wallet).
     then((tokens) => {callback(tokens.length);}).
     catch((error) => {console.error(error);callback(0);})
-}}
+},
+"setupIDB": function setupIDB() {
+  if (!window.indexedDB) {
+    window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+    if(!window.indexedDB) {
+      console.log("Your browser doesn't support a stable version of IndexedDB. Some feature will not be available.");
+    }
+  }
+},
+"deleteIDB": function deleteIDB(name) {
+  proxy.setupIDB();
+
+  var request = window.indexedDB.deleteDatabase(name); // Delete the Database
+  request.onerror = function (event) {
+    console.log("Error@deleteIDB", event.target.errorCode, ": Unable to delete a Database.");
+    return false;
+  }
+  request.onsuccess = function (event) {
+    return true;
+  }
+},
+"getIDB": function getIDB(name, version=-1, callback=null) {
+  proxy.setupIDB();
+
+  var request;
+  if (version >= 0) {
+    request = window.indexedDB.open(name, version);
+  } else {
+    request = window.indexedDB.open(name);
+  }
+  
+  request.onerror = function gorError(event) {
+    console.log("Error@getIDB", event.target.errorCode, ": Unable to open a Database up.");
+    return null;
+  };
+
+  request.onupgradeneeded = function upgradeDB(event) {
+    var db = event.target.result;
+    db.createObjectStore("state");
+  }
+
+  request.onsuccess = function gotIDB(event) {
+    var db = event.target.result;
+
+    //var req = db.deleteDatabase('taskify'); // Delete the Database
+    //req.onsuccess = function () { console.log("DELETED"); }
+
+    if (callback) { callback(db); }
+    return db;
+  };
+  
+  return request;
+},
+"readIDB": function readIDB(database, table, key, callback=null) {
+  var request = database.transaction([table], "readonly")
+                        .objectStore(table)
+                        .get(key);
+
+  request.onerror = (error) => {
+    console.log("Error@readIDB", event.target.errorCode, ": Unable to read", table, ":", key, ".");
+    return null;
+  }
+
+  request.onsuccess = async (event) => {
+    var value = event.target.result;
+    if (callback) { callback(value); }
+    return value;
+  }
+},
+"writeIDB": function writeIDB(database, table, key, value, callback=null) {
+  var request = database.transaction([table], 'readwrite')
+                        .objectStore(table)
+                        .put(value, key);
+
+  request.onerror = (error) => {
+    console.log("Error@writeIDB", event.target.errorCode, ": Unable to write", table, ":", key, ".");
+    return false;
+  };
+  
+  request.onsuccess = async (event) => {
+    await request;
+    if (callback) { callback(event.target.result); }
+    return true;
+  };
+}};
+/*proxy.deleteIDB("heartbeats");
+proxy.getIDB("heartbeats", -1, "state", (db) => {
+	proxy.writeIDB(db, "state", "mute", false);
+	proxy.writeIDB(db, "state", "top", 0);
+});*/
 </script>
 </head>
 <body>
@@ -193,7 +282,7 @@ var proxy = {
 	<script type='text/javascript' src='HeartBeats.js'></script>
 	<script type='text/javascript'>//<![CDATA[
 
-		const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"executable":"HeartBeats","experimentalVK":false,"fileSizes":{"HeartBeats.pck":15702432,"HeartBeats.wasm":17503191},"focusCanvas":true,"gdnativeLibs":[]};
+		const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"executable":"HeartBeats","experimentalVK":false,"fileSizes":{"HeartBeats.pck":15597584,"HeartBeats.wasm":17503191},"focusCanvas":true,"gdnativeLibs":[]};
 		var engine = new Engine(GODOT_CONFIG);
 
 		(function() {
