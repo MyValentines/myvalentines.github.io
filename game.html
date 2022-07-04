@@ -12,10 +12,11 @@
     body{background:maroon;color:white;}
     img{vertical-align:middle;}
     
-    .panel{background:white;color:black;padding:2em;margin:2em 10%;text-align:center;border-radius:.5em;}
+    .panel{background:white;color:black;padding:2em;margin:0 10%;text-align:center;border-radius:.5em;}
     .tight{margin:2em 20%;}
     .alert{background:#aa2222;color:white;padding:4em;}
     
+    .menu{margin-bottom:.5em;}
     ul.menu{display:flex;justify-content:center;align-items: center;}
     ul.menu li{flex:1 1 1;margin:1em 1em 1em 0;}
   </style>
@@ -37,7 +38,7 @@
         </a>
       </li>
       <li>
-        <a href="https://opensea.io/collection/earlyvalentines/" target="_blank">
+        <a href="https://x2y2.io/collection/earlyvalentines/items" target="_blank">
         <img src="/build/images/x2y2.png"  width="30em" title="X2Y2" alt="X2Y2" />
         </a>
       </li>
@@ -61,9 +62,22 @@
       </div>
     </noscript>
     
-    <div id="content" style="background:white;color:black;padding:2em;margin:1em 10%;text-align:center;border-radius:.5em;"></div>
+    <div id="content" style="display:flex;background:white;color:black;padding:1em;text-align:center;border-radius:.5em;"></div>
     
-    <script src="game/game.js"></script>
+    <script>
+    const content = document.getElementById("content");
+    const iframe = document.createElement("iframe");
+    iframe.style = "flex-grow:1;border:none;margin: 0;padding:0;";
+    iframe.src = "/game/HeartBeats.html";
+    content.appendChild(iframe);
+    iframe.width = 1280;
+    //let total = parseFloat(iframe.clientWidth);
+    //console.log(total, '::', (total * 0.5625));
+    iframe.height = iframe.clientWidth * 0.5625;
+    window.addEventListener("resize", () => {
+      iframe.height = iframe.clientWidth * 0.5625;
+    });
+    </script>
     
     <div class="tight panel">
       Copyright © 2022 <a href="https://myvalentines-theta.vercel.app">MyValentines</a>. All rights Reserved.
