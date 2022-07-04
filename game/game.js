@@ -1,1 +1,0 @@
-const content=document.getElementById("content");const iframe=document.createElement("iframe");iframe.style="display:inline;max-width:100%;width:640px;height:360px;";iframe.src="/game/HeartBeats.html";content.appendChild(iframe);
