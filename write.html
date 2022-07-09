@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>MyValentines</title>
+  <link rel="icon" type="image/png" href="build/images/write.png" />
+
+  <style>
+    body{background:plum;color:red;}
+    img{vertical-align:middle;}
+    
+    .panel{background:white;color:black;padding:2em;margin:0 10%;text-align:center;border-radius:.5em;}
+    .tight{margin:2em 20%;}
+    .alert{background:#aa2222;color:white;padding:4em;}
+    
+    .menu{margin-bottom:.5em;}
+    ul.menu{display:flex;justify-content:center;align-items: center;list-style:none;}
+    ul.menu li{flex:1 1 1;margin:1em 1em 1em 0;}
+    
+    .panel h3{margin-top:0;color:purple;}
+    .hide{display:none;}
+    
+    .grid{margin:1em 0;display:flex;flex-direction:column;align-items:center;justify-content:center;max-width:100%;}
+    .grid *{flex:1;margin:.1em;}
+    
+    @media screen and (min-width: 500px) {
+    .grid{flex-direction:row;flex-wrap:wrap;}
+    }
+    
+    canvas{margin:.1em;max-width:100%;max-height:100%;}
+  </style>
+  <link rel="stylesheet" href="/build/main.css">
+  <script type="text/javascript" src="write/proxy.js"></script>
+</head>
+<body>
+  <main>
+    <a href="/"><img id="logo" src="/build/images/logo.png" alt="Logo" /></a>
+
+    <ul class="menu">
+      <li>
+        <a href="/">
+        <img src="/build/images/home.png" width="30em" title="Home" alt="Home" />
+        </a>
+      </li>
+      <li>
+        <a href="https://twitter.com/EarlyValentines/" target="_blank">
+        <img src="/build/images/twitter.png" width="30em" title="Twitter" alt="Twitter" />
+        </a>
+      </li>
+      <li>
+        <a href="https://x2y2.io/collection/earlyvalentines/items" target="_blank">
+        <img src="/build/images/x2y2.png"  width="30em" title="X2Y2" alt="X2Y2" />
+        </a>
+      </li>
+      <li>
+        <a href="https://opensea.io/collection/earlyvalentines/" target="_blank">
+        <img src="/build/images/opensea.png"  width="30em" title="OpenSea" alt="OpenSea" />
+        </a>
+      </li>
+      <li>
+        <a href="https://rarible.com/earlyvalentines/" target="_blank">
+        <img src="/build/images/rarible.svg" width="30em" title="Rarible" alt="Rarible" />
+        </a>
+      </li>
+    </ul>
+    
+    <noscript>
+      <div class="alert panel" role="alert">
+        <strong>Javascript</strong> is disabled so this website won't work.
+        <br/>
+        Please enable it or switch to a modern browser.
+      </div>
+    </noscript>
+    
+    <div id="view" class="hide panel">
+      <div class="grid">
+        <span>
+          <canvas id="editor" width="1000px" height="1000px">The browser doesn't support the canvas element</canvas>
+        </span>
+        <span>
+          <h3>Message</h3>
+          <div><span>Size: <input id="size" type="number" maxlength="2" size="1" value="12" max="30" min="4" /></span><span>Offset: <input id="offset" type="number" maxlength="2" size="1" value="0" max="30" min="-30" /></span></div>
+          <div><input id="M" maxlength="20" type="text" /></div>
+          <div><input id="S" maxlength="20" type="text" value="???" /></div>
+          <div><input id="G" maxlength="20" type="text" /></div>
+          <div>
+            <input id="update" type="button" value="Update" />
+          </div>
+        </span>
+      </div>
+    </div>
+    
+    <div class="tight panel">
+      Copyright © 2022 <a href="https://myvalentines-theta.vercel.app">MyValentines</a>. All rights Reserved.
+    </div>
+    
+    <script>
+      const view = document.getElementById("view");
+      const options = document.getElementById("options");
+      if(view) {view.className = "panel";}
+      if(options) {options.className = "panel";}
+    
+      const Base64_Header = 'data:image/svg+xml;base64,';
+      const SVG_Header = '<svg width="1e3" height="1e3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">';
+      // Get current date, convert it to an ISO String (year-month-dayThours:minutes:secondsZ then RegEx only the Date
+      const SVG_Date = (new Date()).toISOString().match(/(.+)T.+/)[1];
+
+      const SVG_Footer = `<metadata><rdf:RDF><cc:Work rdf:about=""><cc:license rdf:resource="http://creativecommons.org/licenses/by-nc-sa/4.0/" /><dc:title>EnamoredValentines</dc:title><dc:creator><cc:Agent><dc:title>Hyperagon.zil</dc:title></cc:Agent></dc:creator><dc:date>${ SVG_Date }</dc:date></cc:Work><cc:License rdf:about="http://creativecommons.org/licenses/by-nc-sa/4.0/"><cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" /><cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" /><cc:requires rdf:resource="http://creativecommons.org/ns#Notice" /><cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" /><cc:prohibits rdf:resource="http://creativecommons.org/ns#CommercialUse" /><cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" /><cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" /></cc:License></rdf:RDF></metadata></svg>`;
+      
+      const connectButton = document.getElementById("connect");
+      const M = document.getElementById("M");
+      const S = document.getElementById("S");
+      const G = document.getElementById("G");
+      const fontSize = document.getElementById("size");
+      const textOffset = document.getElementById("offset");
+      const updateButton = document.getElementById("update");
+      
+      var currentVector = vector.make();
+      
+      function update(context, vec = null) {
+        let width = context.canvas.width;
+        let height = context.canvas.height;
+        
+        context.clearRect(0, 0, width, height);
+
+        context.beginPath();
+        context.fillStyle = "#888888";
+        context.strokeStyle = "black"; //rebeccapurple
+        context.lineWidth = 10 ;
+        context.rect(0, 0, can.width, can.height);
+        context.fill();
+        context.stroke();
+
+        if(vec == null) { return; }
+        
+        //let b64 = convert.toBase64(makeHeart(M.value, S.value, G.value, fontSize.value, textOffset.value));
+        let b64 = convert.toBase64(vector.toSVG(currentVector, M.value, S.value, G.value, fontSize.value, textOffset.value));
+        svg = Base64_Header + b64;
+        //console.log(svg);
+        let img = new Image(1000, 1000); //var img = document.createElement("img");
+        img.width = width/2;
+        img.height = height/2;
+        img.src = svg;
+        img.onload = () => {
+          context.drawImage(img, 0, 0);
+        }
+      }
+      
+      var can = document.getElementById("editor");
+      var con = can.getContext("2d");
+      if (con) { update(con, currentVector); }
+      
+      let onchange = () => { update(con, currentVector); };
+      updateButton.onclick = onchange;
+    </script>
+  </main>
+</body>
+</html>
