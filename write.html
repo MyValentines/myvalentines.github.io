@@ -12,8 +12,9 @@
     body{background:maroon;color:black;}
     img{vertical-align:middle;}
     
-    .panel{background:white;color:black;padding:2em;margin:0 10%;text-align:center;border-radius:.5em;}
-    .tight{margin:2em 20%;}
+    .panel{background:white;color:black;padding:2em;margin:1% 10%;text-align:center;border-radius:.5em;}
+    .panel:first-item{margin:0 10%;}
+    .tight{margin-left:20%;margin-right:20%;}
     .alert{background:#aa2222;color:white;padding:4em;}
     
     .menu{margin-bottom:.5em;}
@@ -30,10 +31,13 @@
     .grid{flex-direction:row;flex-wrap:wrap;}
     }
     
-    canvas{margin:.1em;max-width:100%;max-height:100%;}
+    canvas{margin:.1em;max-width:100%;max-height:100%;background:white;border:thin solid maroon;border-radius:.5em;}
   </style>
   <link rel="stylesheet" href="/build/main.css">
-  <script type="text/javascript" src="write/proxy.js"></script>
+
+  <script type="text/javascript" src="build/ethers-5.6.umd.min.js"></script>
+  <script type="text/javascript" src="write/proxy.min.js"></script>
+
 </head>
 <body>
   <main>
@@ -81,16 +85,26 @@
           <canvas id="editor" width="1000px" height="1000px">The browser doesn't support the canvas element</canvas>
         </span>
         <span>
+          <h3>Item</h3>
+          <div><span><input id="connect" type="button" value="Connect" /></span><span><select id="which" style="display:none;"></select></span></div>
+          <a id="downloadAnchorElem" style="display:none"></a>
+          <span id="current"></span>
+          <br/>
           <h3>Message</h3>
-          <div><span>Size: <input id="size" type="number" maxlength="2" size="1" value="12" max="30" min="4" /></span><span>Offset: <input id="offset" type="number" maxlength="2" size="1" value="0" max="30" min="-30" /></span></div>
+          <div><span>Size: <input id="size" type="number" maxlength="2" size="1" value="12" max="30" min="5" /></span><span>Offset: <input id="offset" type="number" maxlength="2" size="1" value="0" max="30" min="-30" /></span></div>
           <div><input id="M" maxlength="20" type="text" /></div>
-          <div><input id="S" maxlength="20" type="text" value="???" /></div>
+          <div><input id="S" maxlength="20" type="text" /></div>
           <div><input id="G" maxlength="20" type="text" /></div>
           <div>
             <input id="update" type="button" value="Update" />
           </div>
         </span>
       </div>
+    </div>
+    
+    <div class="panel">
+      <div>♡🤍💛❤️💙💚🧡💜🖤♥ 💖💓💞💝💔💗💘 💌😘😍🥰❣💋</div>
+      <div>Courtesy of the <a href="https://unicode-table.com/en/">Unicode Character Table</a></div>
     </div>
     
     <div class="tight panel">
@@ -104,11 +118,6 @@
       if(options) {options.className = "panel";}
     
       const Base64_Header = 'data:image/svg+xml;base64,';
-      const SVG_Header = '<svg width="1e3" height="1e3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">';
-      // Get current date, convert it to an ISO String (year-month-dayThours:minutes:secondsZ then RegEx only the Date
-      const SVG_Date = (new Date()).toISOString().match(/(.+)T.+/)[1];
-
-      const SVG_Footer = `<metadata><rdf:RDF><cc:Work rdf:about=""><cc:license rdf:resource="http://creativecommons.org/licenses/by-nc-sa/4.0/" /><dc:title>EnamoredValentines</dc:title><dc:creator><cc:Agent><dc:title>Hyperagon.zil</dc:title></cc:Agent></dc:creator><dc:date>${ SVG_Date }</dc:date></cc:Work><cc:License rdf:about="http://creativecommons.org/licenses/by-nc-sa/4.0/"><cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" /><cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" /><cc:requires rdf:resource="http://creativecommons.org/ns#Notice" /><cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" /><cc:prohibits rdf:resource="http://creativecommons.org/ns#CommercialUse" /><cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" /><cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" /></cc:License></rdf:RDF></metadata></svg>`;
       
       const connectButton = document.getElementById("connect");
       const M = document.getElementById("M");
@@ -118,29 +127,19 @@
       const textOffset = document.getElementById("offset");
       const updateButton = document.getElementById("update");
       
-      var currentVector = vector.make();
-      
+      var currentVector;
+
       function update(context, vec = null) {
         let width = context.canvas.width;
         let height = context.canvas.height;
         
         context.clearRect(0, 0, width, height);
 
-        context.beginPath();
-        context.fillStyle = "#888888";
-        context.strokeStyle = "black"; //rebeccapurple
-        context.lineWidth = 10 ;
-        context.rect(0, 0, can.width, can.height);
-        context.fill();
-        context.stroke();
-
         if(vec == null) { return; }
         
-        //let b64 = convert.toBase64(makeHeart(M.value, S.value, G.value, fontSize.value, textOffset.value));
         let b64 = convert.toBase64(vector.toSVG(currentVector, M.value, S.value, G.value, fontSize.value, textOffset.value));
         svg = Base64_Header + b64;
-        //console.log(svg);
-        let img = new Image(1000, 1000); //var img = document.createElement("img");
+        let img = new Image(1000, 1000);
         img.width = width/2;
         img.height = height/2;
         img.src = svg;
@@ -149,12 +148,74 @@
         }
       }
       
+      let updateSelection = (event) => {
+        let id = event.currentTarget.value;
+    
+        proxy.getURI(id, (uri) => {
+            proxy.readLocal(`item/${ id }.json`, (json) => {
+            let b64 = json.image.split(',')[1];
+            let svg = convert.toString(b64);
+            currentVector = vector.toVector(svg);
+            update(con, currentVector);
+          });
+        });
+      }
+    
       var can = document.getElementById("editor");
       var con = can.getContext("2d");
-      if (con) { update(con, currentVector); }
+      if (con) { update(con); }
       
       let onchange = () => { update(con, currentVector); };
       updateButton.onclick = onchange;
+      
+      let onconnect = () => {
+        let connect = document.getElementById('connect');
+        connect.disabled = true;
+
+        proxy.getAddress((wallet) => {
+          let current = document.getElementById('current');
+          current.innerText = proxy.shorten(wallet);
+
+          proxy.getTokens(wallet, (tokens) => { // returns an array of BigNumbers
+            currentVector = null;
+
+            let which = document.getElementById("which");
+            if(which) {
+              if(!which.onchange) {
+                which.onchange = updateSelection;
+              }
+              which.innerHTML = '';
+            } else {
+              which = document.createElement("select");
+              which.id = "which";
+              which.onchange = updateSelection;
+              document.body.appendChild(which);
+            }
+            
+            if(tokens.length < 1) {
+              which.style = "display:none;";
+              onchange();
+            } else {
+              let opt;
+              for (let i = 0; i < tokens.length; ++i) {
+                opt = document.createElement("option");
+                let text = tokens[i].toString();
+                opt.value = text;
+                opt.innerText = text;
+                which.appendChild(opt);
+              }
+              
+              const e = new Event("change");
+              which.dispatchEvent(e);
+              which.style = "display:inherit;";
+            }
+            
+            connect.value = "Reconnect";
+            connect.disabled = false;
+          });
+        });
+      };
+      connectButton.onclick = onconnect;
     </script>
   </main>
 </body>
