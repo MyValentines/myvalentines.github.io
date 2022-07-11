@@ -1,3 +1,9 @@
+/*
+* EV Proxy v3
+* Takes care of Base64 conversion, Contract access and SVG Managing
+* 2022-07-11
+* by Hyperagon.zil
+*/
 const convert = {
   "toHtml": function toHtml(string) {
     // https://stackoverflow.com/questions/14129953/how-to-encode-a-string-in-javascript-for-displaying-in-html
@@ -155,6 +161,128 @@ const convert = {
     return convert.UTF8ArrToStr(convert.base64DecToArr(base64));
   }
 };
+var contract = {
+  "address": "0x731d6C6eF47e62ae0e61f51fE21EC5a513d75C68",
+  "abi": [
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_owner",
+        "type": "address"
+      }
+    ],
+    "name": "walletOfOwner",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{
+      "internalType": "uint256",
+      "name": "_tokenId",
+      "type": "uint256"
+    }],
+    "name":"tokenURI",
+    "outputs": [{
+      "internalType":"string",
+      "name":"","type":"string"
+    }],
+    "stateMutability":"view",
+    "type":"function"
+  }
+],
+"obj": null,
+"get": function getContract() {
+   if (contract.obj == null) {
+      if(!ethers.provider) {
+        ethers.provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+      }
+
+      contract.obj = new ethers.Contract(
+        contract.address,
+        contract.abi,
+        ethers.provider
+      );
+    };
+
+    return contract.obj;
+  }
+};
+var proxy = {
+  "shorten": function shorten(address) {
+    let short = `${ address.slice(0, 6	) } ... ${ address.slice(-4) }`;
+    return short;
+  },
+  "getAddress": async function getAddress(callback) {
+    if(!ethers.provider) {
+      ethers.provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+    }
+    await ethers.provider.send("eth_requestAccounts", []).
+      catch((error) => {console.error(error);}).
+    then((accs) => {
+      if(accs && accs.length > 0) {
+        callback(accs[0]);
+      } else {
+        callback(null);
+      }
+    });
+  },
+  "getTokens": async function getTokens(wallet, callback) {
+    let cont = contract.get();
+    let finished = false;
+    
+    setTimeout(function() { 
+      if(!finished) {
+        callback([]);
+      }
+    }, 1000);
+    
+    cont.walletOfOwner(wallet).
+      //then((tokens) => {callback(tokens.length);}).
+      catch((error) => {
+        console.error(error);
+        finished = true;
+        // convert array of BigNumbers to array of ints (they're under 2500)
+      }).
+      then((tokens) => {
+        finished = true;
+        // convert array of BigNumbers to array of ints
+        callback(tokens.map((item) => {
+              return ethers.BigNumber.from(item).toNumber();
+        }));
+      })
+  },
+  "getURI": async function getURI(id, callback) {
+    let cont = contract.get();
+    
+    await cont.tokenURI(id).
+      then((uri) => {callback(uri);}).
+      catch((error) => {console.error(error);callback(0);})
+  },
+  "readLocal": async function readLocal(path, callback) {
+    // https://stackoverflow.com/questions/26202414/javascript-get-content-of-url
+    // https://stackoverflow.com/questions/19721439/download-json-object-as-a-file-from-browser
+    
+    var iframe = await document.getElementById('source');
+    if (!iframe) { iframe = document.createElement('iframe'); }
+    iframe.id = 'source';
+    iframe.style.display = "none";
+    iframe.src = path;
+    document.body.appendChild(iframe);
+    iframe.contentWindow.document.body.onload = (event) => {
+      callback(JSON.parse(event.target.body.children[0].innerText));
+      //let json = JSON.parse(event.target.body.children[0].innerText);
+      //console.log(json.image);
+    };
+  },
+};
 const vector = {
   "make": function make(original = null) {
     if(original) {
@@ -166,10 +294,10 @@ const vector = {
       };
     } else {
       return {
-        head: '<svg width="1e3" height="1e3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/"><path id="heart" fill="hsl(0,0%,90%)" stroke="hsl(0,0%,20%)" stroke-width="2" d="M 50,90 C 134,40 75,-20 50,24 25,-20 -35,43 50,90 Z"/>',
-        text: '<text fill="hsl(0,0%,20%)" font-size="12px" font-family="sans-serif" font-weight="900" text-align="center" text-anchor="middle">',
-        msg: '<tspan x="50" y="50">???</tspan>',
-        footer: '</text><style>#heart{animation:beat 5s linear forwards infinite;}@keyframes beat{0%{stroke-width:0;}30%{stroke-width:2;}100%{stroke-width:0;}}</style><metadata><rdf:RDF><cc:Work rdf:about=""><cc:license rdf:resource="http://creativecommons.org/licenses/by-nc-sa/4.0/" /><dc:title>EnamoredValentines</dc:title><dc:creator><cc:Agent><dc:title>Hyperagon</dc:title></cc:Agent></dc:creator><dc:date>2022-05-24</dc:date></cc:Work><cc:License rdf:about="http://creativecommons.org/licenses/by-nc-sa/4.0/"><cc:permits rdf:resource="http://creativecommons.org/ns#Reproduction" /><cc:permits rdf:resource="http://creativecommons.org/ns#Distribution" /><cc:requires rdf:resource="http://creativecommons.org/ns#Notice" /><cc:requires rdf:resource="http://creativecommons.org/ns#Attribution" /><cc:prohibits rdf:resource="http://creativecommons.org/ns#CommercialUse" /><cc:permits rdf:resource="http://creativecommons.org/ns#DerivativeWorks" /><cc:requires rdf:resource="http://creativecommons.org/ns#ShareAlike" /></cc:License></rdf:RDF></metadata></svg>'
+        head: '',
+        text: '',
+        msg: '',
+        footer: ''
       };
     }
   },
@@ -201,6 +329,12 @@ const vector = {
     let to = parseInt(offset);
     vector.msg = `<tspan x="50" y="${ 55 - 1.2*fs + to }">${ M }</tspan><tspan x="50" y="${ 55 + to }">${ S }</tspan><tspan x="50" y="${ 55 + 1.2*fs + to }">${ G }</tspan>`;
     
-    return (vector.head.toString()+vector.text.toString()+vector.msg.toString()+vector.footer.toString());
+    // Remove Style to show Stroke
+    //console.log(vector.footer.toString());
+    let c = vector.footer.split('<style>')[0];
+    let d = vector.footer.split('</style>')[1];
+
+    //return (vector.head.toString()+vector.text.toString()+vector.msg.toString()+vector.footer.toString());
+    return (vector.head.toString()+vector.text.toString()+vector.msg.toString()+c+d);
   }
 };
