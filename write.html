@@ -151,15 +151,21 @@
       let updateSelection = (event) => {
         let id = event.currentTarget.value;
     
-        proxy.getURI(id, (uri) => {
-            proxy.readLocal(`item/${ id }.json`, (json) => {
+        proxy.readLocal(`item/${ id }.json`, (json) => {
+          //console.log('ID', id);
+          //console.log('JSON', json);
+          if (json === null) {
+            currentVector = null;
+            update(con);
+            alert(`File for #${ id } wasn't uploaded yet, contact @EarlyValentines!`);
+          } else {
             let b64 = json.image.split(',')[1];
             let svg = convert.toString(b64);
             currentVector = vector.toVector(svg);
             update(con, currentVector);
-          });
+          }
         });
-      }
+      };
     
       var can = document.getElementById("editor");
       var con = can.getContext("2d");
