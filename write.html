@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="/build/main.css">
 
   <script type="text/javascript" src="build/ethers-5.6.umd.min.js"></script>
-  <script type="text/javascript" src="write/proxy.min.js"></script>
+  <script type="text/javascript" src="write/ev.min.js"></script>
 
 </head>
 <body>
@@ -96,7 +96,8 @@
           <div><input id="S" maxlength="20" type="text" /></div>
           <div><input id="G" maxlength="20" type="text" /></div>
           <div>
-            <input id="update" type="button" value="Update" />
+            <input id="update" type="button" value="Update" disabled="true" />
+            <input id="save" type="button" value="Save" disabled="true" />
           </div>
         </span>
       </div>
@@ -111,118 +112,7 @@
       Copyright © 2022 <a href="https://myvalentines-theta.vercel.app">MyValentines</a>. All rights Reserved.
     </div>
     
-    <script>
-      const view = document.getElementById("view");
-      const options = document.getElementById("options");
-      if(view) {view.className = "panel";}
-      if(options) {options.className = "panel";}
-    
-      const Base64_Header = 'data:image/svg+xml;base64,';
-      
-      const connectButton = document.getElementById("connect");
-      const M = document.getElementById("M");
-      const S = document.getElementById("S");
-      const G = document.getElementById("G");
-      const fontSize = document.getElementById("size");
-      const textOffset = document.getElementById("offset");
-      const updateButton = document.getElementById("update");
-      
-      var currentVector;
-
-      function update(context, vec = null) {
-        let width = context.canvas.width;
-        let height = context.canvas.height;
-        
-        context.clearRect(0, 0, width, height);
-
-        if(vec == null) { return; }
-        
-        let b64 = convert.toBase64(vector.toSVG(currentVector, M.value, S.value, G.value, fontSize.value, textOffset.value));
-        svg = Base64_Header + b64;
-        let img = new Image(1000, 1000);
-        img.width = width/2;
-        img.height = height/2;
-        img.src = svg;
-        img.onload = () => {
-          context.drawImage(img, 0, 0);
-        }
-      }
-      
-      let updateSelection = (event) => {
-        let id = event.currentTarget.value;
-    
-        proxy.readLocal(`item/${ id }.json`, (json) => {
-          //console.log('ID', id);
-          //console.log('JSON', json);
-          if (json === null) {
-            currentVector = null;
-            update(con);
-            alert(`File for #${ id } wasn't uploaded yet, contact @EarlyValentines!`);
-          } else {
-            let b64 = json.image.split(',')[1];
-            let svg = convert.toString(b64);
-            currentVector = vector.toVector(svg);
-            update(con, currentVector);
-          }
-        });
-      };
-    
-      var can = document.getElementById("editor");
-      var con = can.getContext("2d");
-      if (con) { update(con); }
-      
-      let onchange = () => { update(con, currentVector); };
-      updateButton.onclick = onchange;
-      
-      let onconnect = () => {
-        let connect = document.getElementById('connect');
-        connect.disabled = true;
-
-        proxy.getAddress((wallet) => {
-          let current = document.getElementById('current');
-          current.innerText = proxy.shorten(wallet);
-
-          proxy.getTokens(wallet, (tokens) => { // returns an array of BigNumbers
-            currentVector = null;
-
-            let which = document.getElementById("which");
-            if(which) {
-              if(!which.onchange) {
-                which.onchange = updateSelection;
-              }
-              which.innerHTML = '';
-            } else {
-              which = document.createElement("select");
-              which.id = "which";
-              which.onchange = updateSelection;
-              document.body.appendChild(which);
-            }
-            
-            if(tokens.length < 1) {
-              which.style = "display:none;";
-              onchange();
-            } else {
-              let opt;
-              for (let i = 0; i < tokens.length; ++i) {
-                opt = document.createElement("option");
-                let text = tokens[i].toString();
-                opt.value = text;
-                opt.innerText = text;
-                which.appendChild(opt);
-              }
-              
-              const e = new Event("change");
-              which.dispatchEvent(e);
-              which.style = "display:inherit;";
-            }
-            
-            connect.value = "Reconnect";
-            connect.disabled = false;
-          });
-        });
-      };
-      connectButton.onclick = onconnect;
-    </script>
+    <script src="write/write.min.js"></script>
   </main>
 </body>
 </html>
