@@ -27,6 +27,12 @@
     .grid{margin:1em 0;display:flex;flex-direction:column;align-items:center;justify-content:center;max-width:100%;}
     .grid *{flex:1;margin:.1em;}
     
+    .wide-button{
+      margin: auto;
+      padding:.4em;
+      width:80%;
+    }
+    
     @media screen and (min-width: 500px) {
     .grid{flex-direction:row;flex-wrap:wrap;}
     }
@@ -95,10 +101,8 @@
           <div><input id="M" maxlength="20" type="text" /></div>
           <div><input id="S" maxlength="20" type="text" /></div>
           <div><input id="G" maxlength="20" type="text" /></div>
-          <div>
-            <input id="update" type="button" value="Update" disabled="true" />
-            <input id="save" type="button" value="Save" disabled="true" />
-          </div>
+          <div><input id="update" class="wide-button" type="button" value="Update" disabled="true" /></div>
+          <div><input id="save" class="wide-button" type="button" value="Save" disabled="true" /></div>
         </span>
       </div>
     </div>
