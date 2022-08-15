@@ -11,6 +11,9 @@
   <style>
     body{background:purple;color:black;}
     img{vertical-align:middle;}
+    .button{padding-top:2em;padding-bottom:1em;}
+    .button:hover{background:pink;border-radius:1em;}
+    .button:hover img{transform:scale(1.3);}
     .logo{margin-bottom:1em;}
     .panel{background:white;color:black;padding:2em;margin:1% 10%;text-align:center;border-radius:.5em;}
     .panel:first-item{margin:0 10%;}
@@ -26,40 +29,37 @@
     <a href="#" class="logo"><img id="logo" src="/build/images/logo.png" alt="Logo" /></a>
 
     <div class="panel grid">
-      <div>
-      <a href="/mint.html">
+      <a class="button" href="/mint.html" style="width:100%;">
         <img style="display:inline;padding-bottom:1em;" src="/build/images/mint.png" title="Mint" alt="Mint" width="80em" />
-      <p>
-      <strong>Mint</strong> yours here!
+        <p>
+        <strong>Mint</strong> yours here!
+        <br />
+        </p>
       </a>
-      <br />
-      or on <a href="https://etherscan.io/address/0x731d6C6eF47e62ae0e61f51fE21EC5a513d75C68#writeContract">Etherscan</a>
-      </p>
-      </div>
 
-      <div>
-        <a href="https://hyperagon.itch.io/heartbeats" target="_blank">
+      <a class="button" href="https://hyperagon.itch.io/heartbeats" target="_blank">
         <img style="display:inline-block;" src="/build/images/game.png" title="Play" alt="Play" width="80em" />
+        <p>
         <br />
         Play HeartBeats
-        </a>
-      </div>
+        </p>
+      </a>
 
-      <div>
-        <a href="https://twitter.com/EarlyValentines/" target="_blank">
+      <a class="button" href="https://twitter.com/EarlyValentines/" target="_blank">
         <img style="display:inline-block;" src="/build/images/twitter.png" title="Twitter" alt="Twitter" width="80em" />
+        <p>
         <br />
         Follow us on Twitter
-        </a>
-      </div>
+        </p>
+      </a>
 
-      <div>
-        <a href="#" target="_blank">
+      <a class="button" href="#" target="_blank">
         <img style="display:inline-block;" src="/build/images/home.png" title="Dashboard" alt="Dashboard" width="80em" />
+        <p>
         <br />
         <del>Visit the Love Nest</del>
-        </a>
-      </div>
+        </p>
+      </a>
     </div>
 
     <div class="tight panel">
